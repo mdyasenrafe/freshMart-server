@@ -34,7 +34,7 @@ exports.signUpUser = async (req, res) => {
     });
   }
 };
-
+// get user
 exports.getUser = async (req, res) => {
   UserModel.findOne({ email: req?.body?.email }, async (err, item) => {
     if (item?.email) {
