@@ -6,10 +6,14 @@ exports.signUpUser = async (req, res) => {
   if (req.body?.password === req.body?.password_repeat) {
     let newPassword = req.body.password.toString();
     hashedPassword = await bcrypt?.hash(newPassword, 10);
+  } else {
+    res.status(200).json({
+      error: true,
+      message: "Password and Confirm Password not match",
+    });
   }
   req.body["password"] = hashedPassword;
   req.body["password_repeat"] = hashedPassword;
-
   if (req.body.method == "google") {
     const filter = { email: req.body.email };
     const options = { upsert: true };
@@ -34,11 +38,19 @@ exports.signUpUser = async (req, res) => {
 exports.getUser = async (req, res) => {
   UserModel.findOne({ email: req?.body?.email }, async (err, item) => {
     if (item?.email) {
-      res.status(200).json({
-        error: false,
-        data: item,
-        message: "data fetch successfully",
-      });
+      bcrypt.compare(
+        req?.body?.password,
+        item?.password,
+        function (err, result) {
+          if (result) {
+            res.status(200).json({ error: false, data: item });
+          } else {
+            res
+              .status(200)
+              .json({ error: true, message: "Wrong Authentication" });
+          }
+        }
+      );
     } else {
       res.status(400).json({ error: true, message: "No User Found" });
     }
