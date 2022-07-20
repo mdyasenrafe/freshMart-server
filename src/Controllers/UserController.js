@@ -38,19 +38,7 @@ exports.signUpUser = async (req, res) => {
 exports.getUser = async (req, res) => {
   UserModel.findOne({ email: req?.body?.email }, async (err, item) => {
     if (item?.email) {
-      bcrypt.compare(
-        req?.body?.password,
-        item?.password,
-        function (err, result) {
-          if (result) {
-            res.status(200).json({ error: false, data: item });
-          } else {
-            res
-              .status(200)
-              .json({ error: true, message: "Wrong Authentication" });
-          }
-        }
-      );
+      res.status(200).json({ error: false, data: item });
     } else {
       res.status(400).json({ error: true, message: "No User Found" });
     }
