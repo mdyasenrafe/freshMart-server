@@ -28,7 +28,7 @@ const CartSchema = new Schema({
     default: "pending",
   },
   quantity: {
-    type: number,
+    type: Number,
     default: 1,
   },
 });
