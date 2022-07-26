@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 
 // file
 const loginRoute = require("./src/Routes/UserRoute");
+const productRoute = require("./src/Routes/ProductRoute");
 
 require("dotenv").config();
 const port = process.env.PORT || 5001;
@@ -29,6 +30,7 @@ mongoose
   .catch((err) => console.log(err.message));
 
 app.use("/user", loginRoute);
+app.use("/product", productRoute);
 
 // cors erorr
 app.all("*", function (req, res, next) {

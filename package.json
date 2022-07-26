@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
@@ -20,6 +21,7 @@
     "mongodb": "^4.8.0",
     "mongoose": "^6.4.5",
     "node": "^18.5.0",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "request": "^2.88.2"
   }
 }
