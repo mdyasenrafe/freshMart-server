@@ -34,6 +34,8 @@ exports.filterProducts = async (req, res) => {
   const filter = req.body.filter;
   if (!filter) {
     allProducts(req, res);
+  } else if (filter === "") {
+    allProducts(req, res);
   } else {
     ProductsModel.find({ filter: filter }, (err, data) => {
       if (err) {
