@@ -37,10 +37,10 @@ exports.GetCart = (req, res) => {
 exports.updateCart = (req, res) => {
   const userId = req.body.userId;
   const productId = req.body.productId;
-  const quantity = req.body.quantity;
-  CartModel.updateOne(
+  const quantity = req.body.productQuantity;
+  CartModel.findOneAndUpdate(
     { userId: userId, productId: productId },
-    { $set: { quantity: quantity } },
+    { $set: { productQuantity: quantity } },
     (err, result) => {
       if (err) {
         res.status(200).json({
