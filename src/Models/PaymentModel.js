@@ -39,7 +39,9 @@ const PaymentSchema = new Schema({
       },
       productQuantity: {
         type: Number,
-        default: 1,
+      },
+      productStatus: {
+        type: String,
       },
     },
   ],

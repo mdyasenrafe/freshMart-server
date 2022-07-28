@@ -11,7 +11,6 @@ const bcrypt = require("bcrypt");
 exports.cratePaymentIntent = async (req, res) => {
   try {
     const { totalAmount, name, email } = req.body;
-    console.log(totalAmount);
     if (!name) return res.status(400).json({ message: "Please enter a name" });
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmount * 100,
@@ -35,6 +34,10 @@ exports.cratePaymentIntent = async (req, res) => {
 
 exports.paymentAdd = async (req, res) => {
   req.body["status"] = "payment sucess";
+  const products = req.body.products;
+  for (const product of products) {
+    product["productStatus"] = "payment sucess";
+  }
   PaymentModel.create(req.body, (err, data) => {
     if (err) {
       res.status(200).json({ error: true, message: err.message });
@@ -56,8 +59,28 @@ exports.paymentAdd = async (req, res) => {
   });
 };
 
-const paymentFail = async (req, res) => {
+exports.paymentFail = async (req, res) => {
   req.body["status"] = "payment failed";
+  const products = req.body.products;
+  for (const product of products) {
+    product["productStatus"] = "payment failed";
+  }
+  PaymentModel.create(req.body, (err, data) => {
+    if (err) {
+      res.status(200).json({ error: true, message: err.message });
+    } else {
+      res
+        .status(200)
+        .json({ error: false, message: "Payment added", data: data });
+    }
+  });
+};
+exports.paymentProcess = async (req, res) => {
+  req.body["status"] = "payment processing";
+  const products = req.body.products;
+  for (const product of products) {
+    product["productStatus"] = "payment processing";
+  }
   PaymentModel.create(req.body, (err, data) => {
     if (err) {
       res.status(200).json({ error: true, message: err.message });
