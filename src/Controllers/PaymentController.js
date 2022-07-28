@@ -18,7 +18,6 @@ exports.cratePaymentIntent = async (req, res) => {
   } catch {
     res.status(200).json({
       error: true,
-      message: err,
     });
   }
 };
