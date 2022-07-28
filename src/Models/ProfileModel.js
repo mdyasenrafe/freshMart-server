@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
+const ProfileSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -10,16 +10,20 @@ const UserSchema = new Schema({
   name: {
     type: String,
   },
-  password: {
+  phoneNumber: {
     type: String,
   },
-  password_repeat: {
+  country: {
+    type: String,
+    default: "Bangladesh",
+  },
+  city: {
     type: String,
   },
-  role: {
+  address: {
     type: String,
-    default: "user",
   },
+
   photoUrl: {
     type: String,
     default: "https://i.ibb.co/MGMchh7/925px-Unknown-person.jpg",
@@ -28,15 +32,7 @@ const UserSchema = new Schema({
     type: Date,
     default: new Date(),
   },
-  method: {
-    type: String,
-    default: "google",
-  },
-  device: {
-    type: String,
-    default: "web",
-  },
 });
 
-const UserModel = mongoose.model("users", UserSchema);
-module.exports = UserModel;
+const ProfileModel = mongoose.model("profile", ProfileSchema);
+module.exports = ProfileModel;

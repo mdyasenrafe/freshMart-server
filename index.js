@@ -8,6 +8,7 @@ const loginRoute = require("./src/Routes/UserRoute");
 const productRoute = require("./src/Routes/ProductRoute");
 const cartRoute = require("./src/Routes/CartRoute");
 const paymentRoute = require("./src/Routes/PaymentRoute");
+const ProfileRoute = require("./src/Routes/ProfileRoute");
 
 require("dotenv").config();
 
@@ -36,6 +37,7 @@ app.use("/user", loginRoute);
 app.use("/product", productRoute);
 app.use("/cart", cartRoute);
 app.use("/payment", paymentRoute);
+app.use("/profile", ProfileRoute);
 
 // cors erorr
 app.all("*", function (req, res, next) {
