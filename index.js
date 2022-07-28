@@ -9,6 +9,7 @@ const productRoute = require("./src/Routes/ProductRoute");
 const cartRoute = require("./src/Routes/CartRoute");
 const paymentRoute = require("./src/Routes/PaymentRoute");
 const ProfileRoute = require("./src/Routes/ProfileRoute");
+const FavoriteRoute = require("./src/Routes/FavoriteRoute");
 
 require("dotenv").config();
 
@@ -38,6 +39,7 @@ app.use("/product", productRoute);
 app.use("/cart", cartRoute);
 app.use("/payment", paymentRoute);
 app.use("/profile", ProfileRoute);
+app.use("/favorite", FavoriteRoute);
 
 // cors erorr
 app.all("*", function (req, res, next) {
