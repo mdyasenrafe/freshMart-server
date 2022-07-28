@@ -68,7 +68,7 @@ exports.updateCart = (req, res) => {
 exports.deleteCart = (req, res) => {
   const userId = req.body.userId;
   const productId = req.body.productId;
-  CartModel.update(
+  CartModel.updateOne(
     { userId: userId, productId: productId },
     { $set: { status: "cancel" } },
     (err, result) => {
