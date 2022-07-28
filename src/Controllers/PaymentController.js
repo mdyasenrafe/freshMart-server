@@ -1,55 +1,70 @@
 require("dotenv").config();
 const Stripe = require("stripe");
-
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const PaymentModel = require("../Models/PaymentModel");
+const CartModel = require("../Models/CartModel");
+const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcrypt");
 
-const express = require("express");
-
-const app = express();
-
-app.use("/stripe", express.raw({ type: "*/*" }));
+// random id generate
 
 exports.cratePaymentIntent = async (req, res) => {
-  console.log(req.body);
   try {
-    const { name } = req.body;
+    const { totalAmount, name, email } = req.body;
+    console.log(totalAmount);
     if (!name) return res.status(400).json({ message: "Please enter a name" });
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(25 * 100),
+      amount: totalAmount * 100,
       currency: "USD",
       payment_method_types: ["card"],
-      metadata: { name },
+      metadata: { name, email },
     });
+    let hashUid = await bcrypt?.hash(uuidv4(), 10);
+
     const clientSecret = paymentIntent.client_secret;
-    res.json({ message: "Payment initiated", clientSecret });
+    res.json({
+      message: "Payment initiated",
+      clientSecret: clientSecret,
+      uuid: hashUid,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-const checkPayment = async (req, res) => {
-  const sig = req.headers["stripe-signature"];
-  let event;
-  try {
-    event = await stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ message: err.message });
-  }
+exports.paymentAdd = async (req, res) => {
+  req.body["status"] = "payment sucess";
+  PaymentModel.create(req.body, (err, data) => {
+    if (err) {
+      res.status(200).json({ error: true, message: err.message });
+    } else {
+      CartModel.deleteMany({ userId: id }, (err, item) => {
+        if (err) {
+          res.status(500).json({ error: true, message: err.message });
+        } else {
+          if (item.deletedCount === 0) {
+            res.status(200).json({ error: true, message: "Cart is empty" });
+          } else {
+            res
+              .status(200)
+              .json({ error: false, message: "Payment added", data: data });
+          }
+        }
+      });
+    }
+  });
+};
 
-  // Event when a payment is initiated
-  if (event.type === "payment_intent.created") {
-    console.log(`${event.data.object.metadata.name} initated payment!`);
-  }
-  // Event when a payment is succeeded
-  if (event.type === "payment_intent.succeeded") {
-    console.log(`${event.data.object.metadata.name} succeeded payment!`);
-    // fulfilment
-  }
-  res.json({ ok: true });
+const paymentFail = async (req, res) => {
+  req.body["status"] = "payment failed";
+  PaymentModel.create(req.body, (err, data) => {
+    if (err) {
+      res.status(200).json({ error: true, message: err.message });
+    } else {
+      res
+        .status(200)
+        .json({ error: false, message: "Payment added", data: data });
+    }
+  });
 };
