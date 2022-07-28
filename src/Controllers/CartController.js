@@ -25,10 +25,17 @@ exports.GetCart = (req, res) => {
         message: err,
       });
     } else {
+      const uniqueItem = [];
+      for (const item in result) {
+        if (item.status === "cancel") {
+        } else {
+          uniqueItem.push(item);
+        }
+      }
       res.status(200).json({
         error: false,
         message: "Successfully fetched cart",
-        data: result,
+        data: uniqueItem,
       });
     }
   });
@@ -61,18 +68,22 @@ exports.updateCart = (req, res) => {
 exports.deleteCart = (req, res) => {
   const userId = req.body.userId;
   const productId = req.body.productId;
-  CartModel.findOne({ userId: userId, productId: productId }, (err, result) => {
-    if (err) {
-      res.status(200).json({
-        error: true,
-        message: err,
-      });
-    } else {
-      res.status(200).json({
-        error: false,
-        message: "Successfully delete cart",
-        data: result,
-      });
+  CartModel.update(
+    { userId: userId, productId: productId },
+    { $set: { status: "cancel" } },
+    (err, result) => {
+      if (err) {
+        res.status(200).json({
+          error: true,
+          message: err,
+        });
+      } else {
+        res.status(200).json({
+          error: false,
+          message: "Successfully delete cart",
+          data: result,
+        });
+      }
     }
-  });
+  );
 };
