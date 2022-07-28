@@ -17,6 +17,12 @@ const PaymentSchema = new Schema({
   paymentMethod: {
     type: String,
   },
+  status: {
+    type: String,
+  },
+  paymentId: {
+    type: String,
+  },
   products: [
     {
       productId: {
