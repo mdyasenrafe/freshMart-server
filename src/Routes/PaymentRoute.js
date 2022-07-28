@@ -4,6 +4,6 @@ const { cratePaymentIntent } = require("../Controllers/PaymentController");
 
 const router = express.Router();
 
-router.post("/create-payment-intent", cratePaymentIntent);
+router.post("/pay", cratePaymentIntent);
 
 module.exports = router;
