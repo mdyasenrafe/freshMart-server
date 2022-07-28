@@ -61,21 +61,18 @@ exports.updateCart = (req, res) => {
 exports.deleteCart = (req, res) => {
   const userId = req.body.userId;
   const productId = req.body.productId;
-  CartModel.deleteOne(
-    { userId: userId, productId: productId },
-    (err, result) => {
-      if (err) {
-        res.status(200).json({
-          error: true,
-          message: err,
-        });
-      } else {
-        res.status(200).json({
-          error: false,
-          message: "Successfully delete cart",
-          data: result,
-        });
-      }
+  CartModel.findOne({ userId: userId, productId: productId }, (err, result) => {
+    if (err) {
+      res.status(200).json({
+        error: true,
+        message: err,
+      });
+    } else {
+      res.status(200).json({
+        error: false,
+        message: "Successfully delete cart",
+        data: result,
+      });
     }
-  );
+  });
 };
