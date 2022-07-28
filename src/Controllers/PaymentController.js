@@ -13,7 +13,7 @@ exports.cratePaymentIntent = async (req, res) => {
     const { totalAmount, name, email } = req.body;
     if (!name) return res.status(400).json({ message: "Please enter a name" });
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount * 100,
+      amount: (totalAmount * 100).toFixed(4),
       currency: "USD",
       payment_method_types: ["card"],
       metadata: { name, email },
