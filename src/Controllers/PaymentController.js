@@ -35,6 +35,7 @@ exports.cratePaymentIntent = async (req, res) => {
 exports.paymentAdd = async (req, res) => {
   req.body["status"] = "payment sucess";
   const products = req.body.products;
+  const id = req.body.userId;
   for (const product of products) {
     product["productStatus"] = "payment sucess";
   }
