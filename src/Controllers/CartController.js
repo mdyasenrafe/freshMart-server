@@ -26,7 +26,7 @@ exports.GetCart = (req, res) => {
       });
     } else {
       const uniqueItem = [];
-      for (const item in result) {
+      for (const item of result) {
         if (item.status === "cancel") {
         } else {
           uniqueItem.push(item);
