@@ -1,21 +1,7 @@
 const ProfileModel = require("../Models/ProfileModel");
 
-exports.AddProfile = async (req, res) => {
-  ProfileModel.create(req.body, async (err, data) => {
-    if (err) {
-      res.status(200).json({ error: true, message: err });
-    } else {
-      res.status(200).json({
-        error: false,
-        message: "created successfully",
-        data: data,
-      });
-    }
-  });
-};
-
 exports.getProfile = async (req, res) => {
-  ProfileModel.findOne({ id: req.body._id }, async (err, data) => {
+  ProfileModel.findOne({ email: req.body.email }, async (err, data) => {
     if (err) {
       res.status(200).json({ error: true, message: err });
     } else {
