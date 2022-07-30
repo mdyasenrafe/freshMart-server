@@ -58,7 +58,7 @@ const CategoryProducts = (req, res, category) => {
     }
   });
 };
-// tesiting
+// tesiting the code
 
 exports.filter = async (req, res) => {
   const filter = req.body.filter;
