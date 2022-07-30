@@ -92,3 +92,48 @@ exports.paymentProcess = async (req, res) => {
     }
   });
 };
+
+exports.getPayment = async (req, res) => {
+  PaymentModel.find({ userId: req.body?.userId }, (err, data) => {
+    if (err) {
+      res.status(200).json({ error: true, message: err.message });
+    } else {
+      res
+        .status(200)
+        .json({ error: false, message: "data fetch succesfully", data: data });
+    }
+  });
+};
+//  sucess payment bot after 30 min payment status change to sucess
+
+exports.paymentSucessBot = async (req, res) => {
+  PaymentModel.find((err, data) => {
+    console.log(data);
+    if (err) {
+      res.status(200).json({ error: true, message: err.message });
+    } else {
+      for (const product of data) {
+        if (product?.createdAt) {
+          var diff = Math.abs(new Date(product?.createdAt) - new Date());
+          var minutes = Math.floor(diff / 1000 / 60);
+          console.log(product?._id, minutes);
+          // check 30 min
+          if (data.status != "payment failed" && minutes > 30) {
+            PaymentModel.updateOne(
+              { _id: product?._id },
+              { $set: { status: "Delivered" } },
+              (err, data) => {
+                console.log(data);
+              }
+            );
+          } else {
+          }
+        }
+      }
+      res.status(200).json({
+        error: false,
+        message: "thank you for your payment",
+      });
+    }
+  });
+};

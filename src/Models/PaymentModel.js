@@ -45,6 +45,10 @@ const PaymentSchema = new Schema({
       },
     },
   ],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const PaymentModel = mongoose.model("payment", PaymentSchema);
