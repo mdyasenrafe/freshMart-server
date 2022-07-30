@@ -88,7 +88,6 @@ exports.getSingleProduct = (req, res, filter) => {
       res.status(200).json({
         error: false,
         message: "data fetch successfully",
-        count: data.length,
         data: data,
       });
     }
