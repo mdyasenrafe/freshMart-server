@@ -79,6 +79,20 @@ exports.filter = async (req, res) => {
     allProducts(req, res);
   }
 };
+exports.getSingleProduct = (req, res, filter) => {
+  ProductsModel.findOne({ _id: req?.body?.id }, (err, data) => {
+    if (err) {
+      res.status(200).json({ error: true, message: err });
+    } else {
+      res.status(200).json({
+        error: false,
+        message: "data fetch successfully",
+        count: data.length,
+        data: data,
+      });
+    }
+  });
+};
 
 // exports.CategoryProducts = async (req, res) => {
 //   const category = req.body.category;
